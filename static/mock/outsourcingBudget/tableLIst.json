@@ -1,0 +1,87 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "page": 1,
+            "pageSize": 10
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "artName",
+                    "title": "美术外包内容"
+                },
+                {
+                    "key": "unitPrice",
+                    "title": "单价"
+                },
+                {
+                    "key": "currencyName",
+                    "title": "币种"
+                },
+                {
+                    "key": "totalCostName",
+                    "title": "成本总值"
+                },
+                {
+                    "key": "2018/08",
+                    "title": "2018/08"
+                },
+                {
+                    "key": "2018/09",
+                    "title": "2018/09"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "artId": 2,
+                    "artName": "写实原画角色",
+                    "unitPrice": "100",
+                    "currencyId": 3,
+                    "currencyName": "人民币(RMB)",
+                    "totalCostName": "123123",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 2,
+                    "artId": 2,
+                    "artName": "写实原画角色",
+                    "unitPrice": "100",
+                    "currencyId": 3,
+                    "currencyName": "人民币(RMB)",
+                    "totalCostName": "123123",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 3,
+                    "artId": 2,
+                    "artName": "写实原画角色",
+                    "unitPrice": "100",
+                    "currencyId": 3,
+                    "currencyName": "人民币(RMB)",
+                    "totalCostName": "123123",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 4,
+                    "artId": 2,
+                    "artName": "合计",
+                    "unitPrice": "100",
+                    "currencyId": 3,
+                    "currencyName": "人民币(RMB)",
+                    "totalCostName": "99999999",
+                    "2018/08": "800",
+                    "2018/09": "600"
+                }
+            ],
+            "total": 40,
+            "page": 1,
+            "pageSize": "1"
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }

@@ -1,0 +1,67 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "page": 1,
+            "pageSize": 10
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "contentName",
+                    "title": "发行内容"
+                },
+                {
+                    "key": "projectName",
+                    "title": "所属项目"
+                },
+                {
+                    "key": "date",
+                    "title": "年月"
+                },
+                {
+                    "key": "costValue",
+                    "title": "成本值"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "costValue": "100"
+                },
+                {
+                    "id": 2,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "costValue": "100"
+                },
+                {
+                    "id": 3,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "costValue": "100"
+                },
+                {
+                    "id": 4,
+                    "contentId": 2,
+                    "contentName": "合计",
+                    "projectId": 3,
+                    "projectName": "-",
+                    "costValue": "100"
+                }
+            ],
+            "total": 40,
+            "page": 1,
+            "pageSize": "1"
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }

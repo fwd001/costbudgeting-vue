@@ -1,0 +1,210 @@
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+dl,
+li,
+dt,
+dd {
+  /* 默认有边距，都要清除 */
+  margin: 0;
+  padding: 0;
+  /*字体设置*/
+  font-size: 0.072917rem /* 14/192 */;
+  font-family: 'Microsoft Yahei', sans-serif;
+  color: #111;
+  /* 去掉列表的原点 */
+  list-style: none;
+  /* 默认鼠标 */
+  cursor: default;
+}
+.static .blue-line {
+  background-color: #169bd4;
+  display: inline-block;
+  height: 0.020833rem /* 4/192 */;
+  width: 0.322917rem /* 62/192 */;
+  box-shadow: 0px 0px 7px #169bd4;
+  /* margin: 0 50px; */
+}
+/* 头部 */
+header {
+  color: #111111;
+  padding: 0.15625rem /* 30/192 */ 0.208333rem /* 40/192 */ 0.052083rem
+    /* 10/192 */;
+  /* background-color: #ccc; */
+  img {
+    width: 0.572917rem /* 110/192 */;
+  }
+}
+
+header div {
+  text-align: center;
+  display: inline-block;
+}
+
+header h3 {
+  margin-top: 0.052083rem /* 10/192 */;
+  font-size: 0.114583rem /* 22/192 */;
+  font-weight: 700;
+}
+/* 第二个区域 */
+.second {
+  height: 3.895833rem /* 748/192 */;
+  /* background-color: #ccc; */
+  background: url('../images/bg-01.png') no-repeat 40% 11px;
+  background-size: 7.46875rem /* 1434/192 */;
+  /* background-origin: center; */
+  text-align: center;
+  img {
+    width: 5.84375rem /* 1122/192 */;
+  }
+}
+.second .top .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+h3.header {
+  font-size: 0.229167rem /* 44/192 */;
+  font-weight: 700;
+  color: #535353;
+  line-height: 0.364583rem /* 70/192 */;
+  padding-left: 0.260417rem /* 50/192 */;
+}
+
+h3.header.first {
+  font-size: 0.229167rem /* 44/192 */;
+  font-weight: 700;
+  color: #535353;
+  line-height: 0.364583rem /* 70/192 */;
+  padding: 0 0.260417rem /* 50/192 */;
+}
+
+p.desc {
+  font-size: 0.09375rem /* 18/192 */;
+  color: #535353;
+  line-height: 0.1875rem /* 36/192 */;
+}
+/* 第三页 */
+.third {
+  height: 4.046875rem /* 777/192 */;
+  /* background-color: #f2f8fe; */
+  display: flex;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  img {
+    width: 1.125rem /* 216/192 */;
+  }
+  .t-f img {
+    width: 3.651042rem /* 701/192 */;
+  }
+}
+
+.third .top .title {
+  display: flex;
+  align-items: center;
+  padding-top: 0.520833rem /* 100/192 */;
+}
+
+.third .top p {
+  width: 2.65625rem /* 510/192 */;
+  padding-left: 0.572917rem /* 110/192 */;
+}
+.third .bottom {
+  text-align: center;
+  padding-top: 0.46875rem /* 90/192 */;
+}
+
+/* 底部大块 */
+.footer {
+  height: 17.317708rem /* 3325/192 */;
+  background: url('../images/tu4-bg.png') no-repeat center;
+  background-size: cover;
+}
+.fourth {
+  height: 4.036458rem /* 775/192 */;
+  box-sizing: border-box;
+  padding-top: 0.416667rem /* 80/192 */;
+  display: flex;
+  justify-content: center;
+  img {
+    width: 4.729167rem /* 908/192 */;
+  }
+}
+.fourth .top .title {
+  display: flex;
+  align-items: center;
+  padding-top: 0.203125rem /* 39/192 */;
+}
+.fourth .top p {
+  max-width: 3.125rem /* 600/192 */;
+  white-space: normal;
+  padding-left: 0.520833rem /* 100/192 */;
+}
+
+.fifth {
+  /* height: 775px; */
+  /* box-sizing: border-box; */
+  padding-top: 0.286458rem /* 55/192 */;
+  display: flex;
+  justify-content: space-around;
+  img {
+    width: 4.729167rem /* 908/192 */;
+  }
+}
+.fifth .top .title {
+  display: flex;
+  align-items: center;
+  padding-top: 0.338542rem /* 65/192 */;
+}
+.fifth .top p {
+  /* width: 450px; */
+  max-width: 2.34375rem /* 450/192 */;
+  white-space: normal;
+  padding-left: 0.520833rem /* 100/192 */;
+}
+
+.sixth {
+  /* height: 775px; */
+  /* box-sizing: border-box; */
+  padding-top: 0.833333rem /* 160/192 */;
+  display: flex;
+  justify-content: space-around;
+  img {
+    width: 4.96875rem /* 954/192 */;
+  }
+}
+.sixth .top .title {
+  display: flex;
+  align-items: center;
+  padding-top: 0.572917rem /* 110/192 */;
+}
+.sixth .top p {
+  max-width: 2.34375rem /* 450/192 */;
+  white-space: normal;
+  padding-left: 0.520833rem /* 100/192 */;
+}
+
+/* 底部文字 */
+footer {
+  text-align: center;
+  padding-top: 1.875rem /* 360/192 */;
+}
+
+footer h3 {
+  font-size: 0.135417rem /* 26/192 */;
+  color: #0d98f3;
+  line-height: 0.286458rem /* 55/192 */;
+}
+footer p {
+  font-size: 0.09375rem /* 18/192 */;
+  color: #535353;
+  line-height: 0.286458rem /* 55/192 */;
+  letter-spacing: 1px;
+}

@@ -1,0 +1,87 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "page": 1,
+            "pageSize": 10
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "contentName",
+                    "title": "发行内容"
+                },
+                {
+                    "key": "projectName",
+                    "title": "所属项目"
+                },
+                {
+                    "key": "totalValue",
+                    "title": "预计总值"
+                },
+                {
+                    "key": "2018/08",
+                    "title": "2018/08"
+                },
+                {
+                    "key": "2018/09",
+                    "title": "2018/09"
+                },
+                {
+                    "key": "rowTotal",
+                    "title": "合计"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "totalValue": 2215,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "测试项目",
+                    "2018/08": "100",
+                    "2018/09": "1230",
+                    "rowTotal": "12314"
+                },
+                {
+                    "id": 2,
+                    "totalValue": 6754,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚项目",
+                    "2018/08": "100",
+                    "2018/09": "2134",
+                    "rowTotal": "12314"
+                },
+                {
+                    "id": 3,
+                    "totalValue": 254675,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试",
+                    "2018/08": "100",
+                    "2018/09": "3450",
+                    "rowTotal": "12314"
+                },
+                {
+                    "id": 4,
+                    "totalValue": 22222,
+                    "contentId": 2,
+                    "contentName": "合计",
+                    "projectId": 3,
+                    "projectName": "-",
+                    "2018/08": "100",
+                    "2018/09": "3450",
+                    "rowTotal": "1111"
+                }
+            ],
+            "total": 40,
+            "page": 1,
+            "pageSize": "1"
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }

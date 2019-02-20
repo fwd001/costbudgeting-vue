@@ -1,0 +1,437 @@
+<div class="manpower">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="招聘需求" name="first">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    招聘需求
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm1'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm1.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm1Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                  <div class="add ml-20"  v-if="$store.getters.permission">
+                      <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+                      <el-button size="mini" @click="addMember1" round type="primary">新增</el-button>
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading1"
+                      :data="tableData"
+                      :stripe = "true"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}"
+                      border
+                      height="636"
+                      style="width: 100%">
+                      <el-table-column
+                        v-for="(item, index) in column"
+                        :width="index === column.length-1? 'auto':'150'"
+                        min-width="150"
+                        :fixed="index === 0 || index === 1 || index === 2 || index === 3"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum(1)}}
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        v-if="$store.getters.permission"
+                        fixed="right"
+                        label="操作"
+                        width="100"
+                        prop="edit">
+                        <template slot-scope="scope">
+                          <el-button  title="编辑" @click="tableEditor1(scope.row)"  type="text" size="small">编辑</el-button>
+                          <el-button  title="删除" style="color: #F56C6C" @click="tableDelete1(scope.row.id, scope)" type="text" size="small">删除</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                      <el-pagination
+                        :page-sizes="[10, 20, 50, 100]"
+                        layout="total, sizes, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        :current-page.sync="currentPage"
+                        :total="total"
+                        @current-change="paginationTable">
+                      </el-pagination>
+                    </div>
+                </div>
+
+                <!-- 新增弹框 -->
+                <!-- <el-dialog title="项目基本信息" :visible.sync="dialogVisible" width="600px"> -->
+                <el-dialog
+                  width="550px"
+                  title="人力预算-HC需求"
+                  :visible.sync="dialogVisible"
+                  :close-on-click-modal="false"
+                  :close-on-press-escape="false"
+                  :show-close = true
+                  lock-scroll
+                  custom-class= "baseinfo-dialog"
+                  append-to-body>
+                  <div class="ovflow_scroll" v-loading="dialogLoading1" style="max-height:500px; padding: 0 30px;">
+                    <el-form size="small"
+                      :model="ruleForm1"
+                      :rules="rules"
+                      ref="ruleForm1"
+                      label-width="70px"
+                      class="demo-ruleForm overhide"
+                      style="display:block;height: 100%">
+
+                      <!-- <el-form-item label="项目" prop="projectId">
+                        <el-select v-model="ruleForm1.projectId" placeholder="请选择项目"
+                        style="width: 100%">
+                          <el-option
+                            v-for="item in projectOpt"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+                      </el-form-item> -->
+
+                      <el-form-item label="级别" prop="rank">
+                          <el-select
+                            v-model="ruleForm1.rank"
+                            placeholder="请选择级别"
+                            style="width: 100%"
+                            v-if="dialogType === 'add'">
+                            <el-option
+                              v-for="item in rankOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ rankName }}</span>
+                        </el-form-item>
+                        <el-form-item label="类型" prop="class">
+                          <el-select
+                            v-if="dialogType === 'add'"
+                            v-model="ruleForm1.class"
+                            placeholder="请选择类型"
+                            v-on:change="getWorkerTypeFun1($event)"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in workerClassOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ className }}</span>
+                        </el-form-item>
+                        <el-form-item label="工种" prop="type">
+                          <el-select
+                            v-if="dialogType === 'add'"
+                            v-model="ruleForm1.type"
+                            placeholder="请选择工种"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in workerTypeOpt1"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ typeName }}</span>
+                        </el-form-item>
+
+                        <el-form-item
+                          v-for="(item,index) in formItemObj1"
+                          :key="item.name"
+                          :label="index">
+                          <el-input
+                            v-model.number="formItemObj1[index]"
+                            placeholder="请输入人力预算"
+                            auto-complete="off">
+                          </el-input>
+                        </el-form-item>
+                    </el-form>
+                  </div>
+                  <span slot="footer" class="dialog-footer" >
+                      <el-button size="small" :loading="dialogLoading1" type="primary" @click="submitForm1(dialogType)">立即提交</el-button>
+                      <el-button size="small" @click="dialogVisible = false">取消</el-button>
+                  </span>
+                </el-dialog>
+              </el-row>
+        </el-tab-pane>
+
+
+        <el-tab-pane label="人力投入" name="second">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    人力投入
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm2'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm2.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm2Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+
+                  <div class="add ml-20" v-if="$store.getters.permission">
+                      <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+                      <el-button size="mini" @click="addMember2" round type="primary">新增</el-button>
+                  </div>
+
+                  <div class="select ml-20">
+                    <el-checkbox @change='paginationTable2' v-model="historyChecked">查看历史投入度</el-checkbox>
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading2"
+                      :data="tableData2"
+                      :stripe = "true"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}"
+                      border
+                      height="636"
+                      style="width: 100%">
+                      <el-table-column
+                        :width="index === column2.length-1? 'auto':'150'"
+                        min-width="150"
+                        v-for="(item, index) in column2"
+                        :fixed="index === 0 || index === 1 || index === 2 || index === 3"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum(1)}}
+                        </template>
+                      </el-table-column>
+
+                      <el-table-column
+                        v-if="$store.getters.permission"
+                        fixed="right"
+                        label="操作"
+                        width="100"
+                        prop="edit">
+                        <template slot-scope="scope">
+                          <el-button title="编辑" @click="tableEditor2(scope.row)"  type="text" size="small">编辑</el-button>
+                          <el-button title="删除" style="color: #F56C6C" @click="tableDelete2(scope.row.id, scope)" type="text" size="small">删除</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                        <el-pagination
+                          :page-sizes="[10, 20, 50, 100]"
+                          layout="total, sizes, prev, pager, next"
+                          @size-change="handleSizeChange"
+                          :page-size="pageSize"
+                          :current-page.sync="currentPage2"
+                          :total="total2"
+                          @current-change="paginationTable2">
+                        </el-pagination>
+                    </div>
+                </div>
+
+                <!-- 新增弹框 -->
+                <!-- <el-dialog title="项目基本信息" :visible.sync="dialogVisible" width="600px"> -->
+                <el-dialog
+                  width="550px"
+                  title="人力预算-投入预算"
+                  :visible.sync="dialogVisible2"
+                  :close-on-click-modal="false"
+                  :close-on-press-escape="false"
+                  :show-close = true
+                  lock-scroll
+                  custom-class= "baseinfo-dialog"
+                  append-to-body>
+                  <div class="ovflow_scroll" v-loading="dialogLoading2" style="max-height:500px; padding: 0 30px;">
+                    <el-form size="small"
+                      :model="ruleForm2"
+                      :rules="rules2"
+                      ref="ruleForm2"
+                      label-width="70px"
+                      class="demo-ruleForm overhide"
+                      style="display:block;height: 100%">
+
+                      <!-- <el-form-item label="项目" prop="projectId">
+                        <el-select v-model="ruleForm2.projectId" placeholder="请选择项目"
+                        style="width: 100%">
+                          <el-option
+                            v-for="item in projectOpt"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+                      </el-form-item> -->
+
+                      <el-form-item label="姓名" prop="uid">
+                          <el-select
+                            v-if="dialogType2 === 'add'"
+                            v-model="ruleForm2.uid"
+                            filterable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入昵称"
+                            :remote-method="remoteMethod"
+                            v-on:change="getUserId($event)"
+                            :loading="loading"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in nickNameOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ uidName2 }}</span>
+                        </el-form-item>
+                        <el-form-item label="类型" prop="class">
+                          <span v-if="dialogType2 !== 'add' && className2 !== ''"> {{ className2 }}</span>
+                          <el-select
+                            v-else-if="!class_add"
+                            v-model="ruleForm2.class"
+                            placeholder="请选择类型"
+                            v-on:change="getWorkerTypeFun2($event)"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in workerClassOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span> {{ class_add }}</span>
+                        </el-form-item>
+                        <el-form-item label="工种" prop="type">
+                          <span v-if="dialogType2 !== 'add' && typeName2 !== ''"> {{ typeName2 }}</span>
+                          <el-select
+                            v-else-if="!type_add"
+                            v-model="ruleForm2.type"
+                            placeholder="请选择工种"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in workerTypeOpt2"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ type_add }}</span>
+                        </el-form-item>
+
+                        <el-form-item
+                          v-for="(item,index) in formItemObj2"
+                          :key="item.name"
+                          :label="index">
+                          <el-input
+                            v-model.number="formItemObj2[index]"
+                            placeholder="请输入人力预算"
+                            auto-complete="off">
+                          </el-input>
+                        </el-form-item>
+
+                    </el-form>
+                  </div>
+                  <span slot="footer" class="dialog-footer" >
+                      <el-button size="small" :loading="dialogLoading2" type="primary" @click="submitForm2(dialogType2)">立即提交</el-button>
+                      <el-button size="small" @click="dialogVisible2 = false">取消</el-button>
+                  </span>
+                </el-dialog>
+              </el-row>
+        </el-tab-pane>
+
+
+        <el-tab-pane label="预算数据" name="third">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                      预算数据
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm3'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm3.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm3Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                </el-row>
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading3"
+                      :data="tableData3"
+                      :stripe = "true"
+                      border
+                      style="width: 100%"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}">
+                      <el-table-column
+                        :width="index === column3.length-1? '200':'200'"
+                        v-for="(item, index) in column3"
+                        :fixed="index === 0 || index === 1"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key"
+                        min-width="200">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum}}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                        <el-pagination
+                          v-if="total3 > 10"
+                          layout="prev, pager, next"
+                          :page-size="pageSize"
+                          :current-page.sync="currentPage3"
+                          :total="total3"
+                          @current-change="paginationTable3">
+                        </el-pagination>
+                    </div>
+                </div>
+              </el-row>
+        </el-tab-pane>
+    </el-tabs>
+</div>

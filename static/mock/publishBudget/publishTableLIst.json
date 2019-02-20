@@ -1,0 +1,71 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "page": 1,
+            "pageSize": 10
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "contentName",
+                    "title": "发行内容"
+                },
+                {
+                    "key": "projectName",
+                    "title": "所属项目"
+                },
+                {
+                    "key": "2018/08",
+                    "title": "2018/08"
+                },
+                {
+                    "key": "2018/09",
+                    "title": "2018/09"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 2,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 3,
+                    "contentId": 2,
+                    "contentName": "备用金",
+                    "projectId": 3,
+                    "projectName": "垚垚的测试项目",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 4,
+                    "contentId": 2,
+                    "contentName": "合计",
+                    "projectId": 3,
+                    "projectName": "-",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                }
+            ],
+            "total": 40,
+            "page": 1,
+            "pageSize": "1"
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }

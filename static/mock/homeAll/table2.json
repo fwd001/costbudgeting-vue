@@ -1,0 +1,101 @@
+{
+  "post": {
+    "projectId": 2,
+    "page": 1,
+    "pageSize": 10
+  },
+  "data": {
+    "total": 40,
+    "column": [
+      {
+        "key": "name",
+        "title": "姓名"
+      },
+      {
+        "key": "department1",
+        "title": "一级部门"
+      },
+      {
+        "key": "department2",
+        "title": "二级部门"
+      },
+      {
+        "key": "project",
+        "title": "项目"
+      },
+      {
+        "key": "type",
+        "title": "类型"
+      },
+      {
+        "key": "workType",
+        "title": "工种"
+      },
+      {
+        "key": "2018/10",
+        "title": "2018/10"
+      },
+      {
+        "key": "check",
+        "title": "核对"
+      },
+      {
+        "key": "remark",
+        "title": "备注"
+      }
+    ],
+    "record": [
+      {
+        "id": 1,
+        "name": "姓名+昵称1",
+        "department1": "二级组织构架名1",
+        "department1Id": "A2321323123",
+        "department2": "二级组织构架名323",
+        "department2Id": 1,
+        "project": "项目333",
+        "projectId": 1,
+        "type": "类型444",
+        "typeId": 1,
+        "workType": "工种555",
+        "workTypeId": 1,
+        "2018/11": "1",
+        "check": [true,false],
+        "remark": "这里是备注222",
+        "edit": false,
+        "date": [
+          {
+            "key": "2018/11",
+            "title": "2018/11"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "姓名+昵称2",
+        "department1": "二级组织构架名2",
+        "department1Id": 3,
+        "department2": "二级组织构架名3",
+        "department2Id": 1,
+        "project": "项目333",
+		
+        "projectId": 1,
+        "type": "类型444",
+        "typeId": 1,
+        "workType": "工种555",
+        "workTypeId": 1,
+        "2018/10": "22",
+        "check": [true,false],
+        "remark": "这里是备注111",
+        "edit": false,
+        "date": [
+          {
+            "key": "2018/07",
+            "title": "2018/07"
+          }
+        ]
+      }
+    ]
+  },
+  "code": 200,
+  "msg": "请求成功"
+}

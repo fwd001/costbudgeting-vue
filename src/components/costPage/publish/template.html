@@ -1,0 +1,307 @@
+<div class="manpower">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="前置发行成本" name="first">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    前置发行成本
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm1'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm1.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm1Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                  <div class="add ml-20" v-if="$store.getters.permission">
+                      <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+                      <el-button size="mini" @click="addMember1" round type="primary">新增</el-button>
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading1"
+                      :data="tableData"
+                      border
+                      height='619'
+                      :stripe = "true"
+                      style="width: 100%"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}">
+                      <el-table-column
+                        v-for="(item, index) in column"
+                        :width="index === column.length-1? 'auto':'200'"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum}}
+                        </template>
+                      </el-table-column>
+
+                      <el-table-column
+                        v-if="$store.getters.permission"
+                        fixed="right"
+                        label="操作"
+                        width="100">
+                        <template slot-scope="scope" v-if="scope.row.contentName !== '合计'">
+                          <el-button title="编辑" @click="tableEditor1(scope.row)"  type="text" size="small">编辑</el-button>
+                          <el-button title="删除" style="color: #F56C6C" @click="tableDelete1(scope.row.id, scope)" type="text" size="small">删除</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                  <div class="block" style="text-align: center;">
+                    <el-pagination
+                      :page-sizes="[10, 20, 50, 100]"
+                      layout="total, sizes, prev, pager, next"
+                      @size-change="handleSizeChange"
+                      :page-size="pageSize"
+                      :current-page.sync="currentPage"
+                      :total="total"
+                      @current-change="paginationTable">
+                    </el-pagination>
+                  </div>
+                </div>
+
+                <!-- 新增弹框 -->
+                <!-- <el-dialog title="项目基本信息" :visible.sync="dialogVisible" width="600px"> -->
+                <el-dialog
+                  width="650px"
+                  title="前置发行成本"
+                  :visible.sync="dialogVisible"
+                  :close-on-click-modal="false"
+                  :close-on-press-escape="false"
+                  :show-close = true
+                  lock-scroll
+                  custom-class= "baseinfo-dialog"
+                  append-to-body>
+                  <div class="ovflow_scroll" v-loading="dialogLoading1" style="max-height:500px; padding: 0 30px;">
+                    <el-form size="small"
+                      :model="ruleForm1"
+                      :rules="rules"
+                      ref="ruleForm1"
+                      label-width="100px"
+                      class="demo-ruleForm overhide"
+                      style="display:block;height: 100%">
+
+                      <!-- <el-form-item label="项目" prop="projectId">
+                        <el-select v-model="ruleForm1.projectId" placeholder="请选择项目"
+                        style="width: 100%">
+                          <el-option
+                            v-for="item in projectOpt"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+                      </el-form-item> -->
+
+                        <el-form-item label="发行内容" prop="contentId">
+                          <el-select v-model="ruleForm1.contentId" placeholder="请选择发行内容"
+                            v-if="dialogType === 'add'"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in contentOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                          <span v-else> {{ contentName }}</span>
+                        </el-form-item>
+
+                        <el-form-item label="年月" prop="date">
+                          <el-date-picker
+                            v-if="dialogType === 'add'"
+                            v-model="ruleForm1.date"
+                            :picker-options="pickerOptions"
+                            type="month"
+                            value-format="yyyy/MM"
+                            placeholder="选择年月">
+                          </el-date-picker>
+                          <span v-else> {{ ruleForm1.date }}</span>
+                        </el-form-item>
+
+                        <el-form-item label="成本值" prop="costValue">
+                            <el-input v-model="ruleForm1.costValue" placeholder="请输入成本值" auto-complete="off"></el-input>
+                        </el-form-item>
+
+                    </el-form>
+                  </div>
+                  <span slot="footer" class="dialog-footer">
+                      <el-button size="small" :loading="dialogLoading1" type="primary" @click="submitForm1(dialogType)">立即提交</el-button>
+                      <el-button size="small" @click="dialogVisible = false">取消</el-button>
+                  </span>
+                </el-dialog>
+              </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="成本数据" name="second">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    成本数据
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm2'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm2.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm2Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      :stripe = "true"
+                      v-loading="tableLoading2"
+                      :data="tableData2"
+                      border
+                      style="width: 100%"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}">
+                      <el-table-column
+                        :width="index === column2.length-1? '200':'200'"
+                        v-for="(item, index) in column2"
+                        :fixed="index === 0 || index === 1"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum}}
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                        <el-pagination
+                          v-if="total2 > 10"
+                          layout="prev, pager, next"
+                          :page-size="pageSize"
+                          :current-page.sync="currentPage2"
+                          :total="total2"
+                          @current-change="paginationTable2">
+                        </el-pagination>
+                    </div>
+                </div>
+
+                <!-- 新增弹框 -->
+                <!-- <el-dialog title="项目基本信息" :visible.sync="dialogVisible" width="600px"> -->
+                <el-dialog
+                  width="550px"
+                  title="前置预算列表"
+                  :visible.sync="dialogVisible2"
+                  :close-on-click-modal="false"
+                  :close-on-press-escape="false"
+                  :show-close = true
+                  lock-scroll
+                  custom-class= "baseinfo-dialog"
+                  append-to-body>
+                  <div class="ovflow_scroll" v-loading="dialogLoading2" style="max-height:500px; padding: 0 30px;">
+                    <el-form size="small"
+                      :model="ruleForm2"
+                      :rules="rules2"
+                      ref="ruleForm2"
+                      label-width="70px"
+                      class="demo-ruleForm overhide"
+                      style="display:block;height: 100%">
+
+                      <!-- <el-form-item label="项目" prop="projectId">
+                        <el-select v-model="ruleForm2.projectId" placeholder="请选择项目"
+                        style="width: 100%">
+                          <el-option
+                            v-for="item in projectOpt"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+                      </el-form-item> -->
+
+                      <el-form-item label="姓名" prop="uid">
+                          <el-select
+                            v-if= "dialogVisible2 === true"
+                            v-model="ruleForm2.uid"
+                            filterable
+                            remote
+                            reserve-keyword
+                            placeholder="请输入昵称"
+                            :remote-method="remoteMethod"
+                            :loading="loading"
+                            style="width: 100%">
+                            <el-option
+                              v-for="item in nickNameOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+                        <el-form-item label="类型" prop="class">
+                          <el-select v-model="ruleForm2.class" placeholder="请选择类型"
+                          style="width: 100%">
+                            <el-option
+                              v-for="item in workerClassOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+                        <el-form-item label="工种" prop="type">
+                          <el-select v-model="ruleForm2.type" placeholder="请选择工种"
+                          style="width: 100%">
+                            <el-option
+                              v-for="item in workerTypeOpt"
+                              :key="item.id"
+                              :label="item.name"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+                        </el-form-item>
+
+                        <el-form-item
+                          v-if="dialogType2 === 'modify'"
+                          v-for="(item,index) in formItemObj2"
+                          :key="item.name"
+                          :label="index">
+                          <el-input
+                            v-model="formItemObj2[index]"
+                            auto-complete="off">
+                          </el-input>
+                        </el-form-item>
+
+                    </el-form>
+                  </div>
+                  <span slot="footer" class="dialog-footer" >
+                      <el-button size="small" :loading="dialogLoading2" type="primary" @click="submitForm2(dialogType2)">立即提交</el-button>
+                      <el-button size="small" @click="dialogVisible2 = false">取消</el-button>
+                  </span>
+                </el-dialog>
+              </el-row>
+        </el-tab-pane>
+    </el-tabs>
+</div>

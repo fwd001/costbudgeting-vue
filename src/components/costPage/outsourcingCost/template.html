@@ -1,0 +1,216 @@
+<div class="manpower">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="美术外包" name="first">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    美术外包
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm1'"
+                        size="mini"
+                        style="width: 250px"
+                        v-model="searchForm1.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm1Request($event)">
+                        <el-option
+                          v-for="item in projectOpt"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                  <div class="add ml-20">
+                      <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+                      <!-- <el-button size="mini" @click="addMember1" round type="primary">新增</el-button> -->
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading1"
+                      :data="tableData"
+                      :stripe = "true"
+                      height='546'
+                      border
+                      style="width: 100%"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}">
+                      <el-table-column
+                        v-for="(item, index) in column"
+                        :fixed="index === 0 || index === 1 || index === 2 || index === 3 || index === 4"
+
+                        :width="item.key === 'name'? '300' : item.key==='pre_price' ? '100' : item.key==='currencyName' ? '100' : item.key==='needdays' ? '100' : item.key==='total' ? '130' : 'auto'"
+                        min-width="200"
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key">
+                        <template slot-scope="{row, column, $index}">
+                            <div v-if="(index === 4 || index === 1)">
+                                {{row[item.key + ''] | getThousandNum(0)}}
+                              </div>
+                              <div v-else>
+                                {{row[item.key + ''] | getThousandNum(1)}}
+                              </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                      <el-pagination
+                        :page-sizes="[10, 20, 50, 100]"
+                        layout="total, sizes, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        :page-size="pageSize"
+                        :current-page.sync="currentPage"
+                        :total="total"
+                        @current-change="paginationTable">
+                      </el-pagination>
+                    </div>
+                </div>
+
+              </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="音频外包" name="second">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                      音频外包
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm2'"
+                        size="mini"
+                        style="width: 250px"
+                        multiple
+                        collapse-tags
+                        v-model="searchForm2.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm2Request($event)">
+                        <el-option
+                          v-for="item in projectOpt2"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                  <div class="add ml-20">
+                      <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+                      <!-- <el-button size="mini" @click="addMember2" round type="primary">新增</el-button> -->
+                  </div>
+                </el-row>
+
+                <!-- table -->
+                <div class="mt20">
+                    <el-table
+                      v-loading="tableLoading2"
+                      :data="tableData2"
+                      :stripe = "true"
+                      border
+                      height='546'
+                      style="width: 100%"
+                      :cell-style="cellStyle2"
+                      :header-cell-style="{textAlign: 'center'}">
+                      <el-table-column
+                        :width="index === column2.length-1? 'auto':'200'"
+                        v-for="(item, index) in column2"
+                        :fixed="index === 0 || index === 1 "
+                        :label="item.title"
+                        :prop="item.key"
+                        :key="item.key"
+                        min-width="200">
+                        <template slot-scope="scope">
+                          {{scope.row[item.key + ''] | getThousandNum}}
+                        </template>
+                      </el-table-column>
+
+                    </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                      <el-pagination
+                        :page-sizes="[10, 20, 50, 100]"
+                        layout="total, sizes, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        :page-size="pageSize"
+                        :current-page.sync="currentPage2"
+                        :total="total2"
+                        @current-change="paginationTable2">
+                      </el-pagination>
+                    </div>
+                </div>
+
+              </el-row>
+        </el-tab-pane>
+        <el-tab-pane label="历史外包数据" name="third">
+            <el-row>
+                <el-row class="table-title">
+                  <div class="title">
+                    历史外包数据
+                  </div>
+                  <div class="select ml-20">
+                      <el-select
+                        :key="11111+ 'searchForm3'"
+                        size="mini"
+                        multiple
+                        collapse-tags
+                        style="width: 250px"
+                        v-model="searchForm3.project"
+                        placeholder="请选择项目"
+                        v-on:change="searchForm3Request($event)">
+                        <el-option
+                          v-for="item in projectOpt3"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+                  </div>
+                </el-row>
+                <!-- table -->
+                <div class="mt20">
+                  <el-table
+                    v-loading="tableLoading3"
+                    :data="tableData3"
+                    :stripe = "true"
+                    border
+                    height='546'
+                    style="width: 100%"
+                    :cell-style="cellStyle2"
+                    :header-cell-style="{textAlign: 'center'}">
+                    <el-table-column
+                      :width="index === column3.length-1? 'auto':'200'"
+                      min-width="200"
+                      v-for="(item, index) in column3"
+                      :fixed="index === 0"
+                      :label="item.title"
+                      :prop="item.key"
+                      :key="item.key">
+                      <template slot-scope="scope">
+                        {{scope.row[item.key + ''] | getThousandNum}}
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </div>
+                <div class="mt20">
+                    <div class="block" style="text-align: center;">
+                      <el-pagination
+                        :page-sizes="[10, 20, 50, 100]"
+                        layout="total, sizes, prev, pager, next"
+                        @size-change="handleSizeChange"
+                        :page-size="pageSize"
+                        :current-page.sync="currentPage3"
+                        :total="total3"
+                        @current-change="paginationTable3">
+                      </el-pagination>
+                    </div>
+                </div>
+              </el-row>
+        </el-tab-pane>
+    </el-tabs>
+</div>

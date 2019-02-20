@@ -1,0 +1,58 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "date": "2018/02"
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "phase",
+                    "title": "阶段"
+                },
+                {
+                    "key": "totalCost",
+                    "title": "总额"
+                },
+                {
+                    "key": "humanCost",
+                    "title": "人员成本"
+                },
+                {
+                    "key": "IPCost",
+                    "title": "IP成本"
+                },
+                {
+                    "key": "outsourcingCost",
+                    "title": "外包成本"
+                },
+                {
+                    "key": "publicCost",
+                    "title": "前置发行成本"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "phase": "截止（2018/09/20）总成本",
+                    "totalCost": 999999,
+                    "humanCost": 131535,
+                    "IPCost": 56415,
+                    "outsourcingCost": 56153,
+                    "publicCost": 91256
+                },
+                {
+                    "id": 1,
+                    "phase": "（2018/09/20）到上线预算还需",
+                    "totalCost": 999999,
+                    "humanCost": 131535,
+                    "IPCost": 56415,
+                    "outsourcingCost": 56153,
+                    "publicCost": 91256
+                }
+                
+            ]
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }

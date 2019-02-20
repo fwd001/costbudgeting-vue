@@ -1,0 +1,449 @@
+<div class="costCom">
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane lazy label="当前人力投入" name="first">
+      <!-- 当前人力投入 -->
+      <el-row>
+        <el-row class="table-title">
+          <div class="title">
+            当前人力投入
+          </div>
+          <div class="select ml-20">
+            <el-select @change='selectPro1' clearable size="mini" v-model="project" clearable placeholder="请选择项目">
+              <el-option
+                v-for="item in allProject1"
+                :key="item.project_id"
+                :label="item.project_name"
+                :value="item.project_id">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="select ml-20">
+            <el-select
+              @change='selectMemType'
+              clearable size="mini"
+              v-model="memType"
+              placeholder="所有成员">
+              <el-option
+                v-for="item in allMemType"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="add ml-20" v-if="$store.getters.permission">
+            <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+            <el-button size="mini" @click="addMember" round type="primary">新增</el-button>
+          </div>
+        </el-row>
+        <el-row class="mt20">
+          <!-- 编辑权限 -->
+          <el-col v-if="$store.getters.permission" :span="24">
+            <el-table
+              :data="proInputData.record"
+              border
+              :cell-style="cellStyle1"
+              v-loading="loading1"
+              style="width: 100%"
+              height="619"
+              :row-class-name="delGray"
+              @cell-dblclick="dbClickCell">
+              <el-table-column
+                prop="month"
+                label="月份"
+                width="166">
+                <template slot-scope="{row, column, $index}">
+                  <el-date-picker
+                    size="mini"
+                    type="month"
+                    value-format="yyyy/MM"
+                    placeholder="选择月份" v-model="row.month"
+                    style="width: 100%;"
+                    @change='changeMonth(row)'></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="profession"
+                label="工种"
+                width="180">
+                <!-- <template slot-scope="{row, column, $index}">
+                </template> -->
+              </el-table-column>
+              <el-table-column
+                prop="project"
+                label="项目"
+                width="180">
+                <template slot-scope="{row, column, $index}">
+                  <el-select
+                    size="mini"
+                    v-model="row.currentProject"
+                    placeholder="请选择项目"
+                    @change='changeMonth(row)'>
+                    <el-option
+                      v-for="item in row.allProject"
+                      :key="item.id"
+                      :label="item.project"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                :prop="inputName"
+                label="系统投入度"
+                width="140">
+                <template slot-scope="{row, column, $index}">
+                  <div class="small-btn">
+                    <el-input size="small" placeholder="" v-model="row.systemInput" class="input-with-select">
+                      <el-button slot="append"
+                        @click='confirm(row)'
+                        >确认</el-button>
+                    </el-input>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                v-for="(item, index) in proInputData.column"
+                :prop="item.key"
+                :label="item.title"
+                :key="item.key"
+                :width="index === proInputData.column.length - 1? '': '180'"
+                min-width="180">
+                <template slot-scope="{row, column, $index}">
+                  <div class="TowCenter" v-if="row[column.property]">
+                    <span class="inputWidth">{{row[column.property]}}</span>
+                    <i class="el-icon-delete pointer highLight" @click="delInput(row, column)"></i>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                :width="proInputData.column.length === 0 ? '' : '100'">
+                <template slot-scope="{row, column, $index}">
+                  <el-button type="text" @click="delData(row)" size="small" style="color: #F56C6C">删除</el-button>
+                </template>
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="人力成本"
+                prop="outsourceSalary"
+                :width="150">
+                <template slot-scope="{row, column, $index}">
+                  <template v-if="row.edit">
+                    <el-input
+                    @blur="manInputEdit(row)"
+                    v-model="row.outsourceSalary" class="edit-input" size="small"/>
+                  </template>
+                  <span v-else>{{ row.outsourceSalary }}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :total="proTotal"
+              :current-page.sync="proPage"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+          <!-- 查看权限 -->
+          <el-col v-else :span="24">
+            <el-table
+              :data="proInputData.record"
+              border
+              v-loading="loading1"
+              height="619"
+              style="width: 100%">
+              <el-table-column
+                prop="month"
+                label="月份"
+                width="166">
+                <template slot-scope="{row, column, $index}">
+                  <el-date-picker
+                    size="mini"
+                    type="month"
+                    value-format="yyyy/MM"
+                    placeholder="选择月份" v-model="row.month"
+                    style="width: 100%;"
+                    @change='changeMonth(row)'></el-date-picker>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="profession"
+                label="工种"
+                width="180">
+                <!-- <template slot-scope="{row, column, $index}">
+                </template> -->
+              </el-table-column>
+              <el-table-column
+                prop="project"
+                label="项目"
+                width="180">
+                <template slot-scope="{row, column, $index}">
+                  <el-select
+                    size="mini"
+                    v-model="row.currentProject"
+                    placeholder="请选择项目"
+                    @change='changeMonth(row)'>
+                    <el-option
+                      v-for="item in row.allProject"
+                      :key="item.id"
+                      :label="item.project"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                :prop="inputName"
+                label="系统投入度"
+                width="140">
+                <template slot-scope="{row, column, $index}">
+                  {{row.systemInput}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                v-for="(item, index) in proInputData.column"
+                :prop="item.key"
+                :label="item.title"
+                :key="item.key"
+                :width="index === proInputData.column.length - 1? '': '180'"
+                min-width="180">
+                <template slot-scope="{row, column, $index}">
+                  <div class="TowCenter" v-if="row[column.property]">
+                    <span class="inputWidth">{{row[column.property]}}</span>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :total="proTotal"
+              :current-page.sync="proPage"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+        <el-dialog title="添加人员" :visible.sync="dialogVisible" width="600px">
+          <el-form v-loading="isLoading" size="small" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+            <el-form-item label="月份" prop="month">
+              <el-date-picker  type="month" value-format="yyyy/MM" :picker-options="pickerOptions0" @change="getUserInfo(memberId,ruleForm.month)" placeholder="选择月份" v-model="ruleForm.month" style="width: 100%;"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="姓名" prop="id">
+              <el-select
+                v-model="ruleForm.id"
+                filterable
+                remote
+                reserve-keyword
+                placeholder="请输入人员"
+                :remote-method="remoteMethod"
+                clearable>
+                <el-option
+                  v-for="item in searchMember"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工种" prop="professionId">
+              <el-select v-model="ruleForm.professionId" placeholder="请选择工种" :disabled="isProfession !== -1">
+                <el-option
+                  v-for="item in allProfession"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="项目" prop="project">
+              <el-select v-model="ruleForm.project" placeholder="请选择项目">
+                <el-option
+                  v-for="item in allProject1"
+                  :key="item.project_id"
+                  :label="item.project_name"
+                  :value="item.project_id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="投入度" prop="systemInput">
+              <el-input v-model="ruleForm.systemInput" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')">立即提交</el-button>
+              <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </el-row>
+    </el-tab-pane>
+
+
+
+    <el-tab-pane lazy label="历史人力投入" name="second">
+      <!-- 历史人力投入 -->
+      <el-row>
+        <el-row class="">
+          <el-col :span="24" class="table-title">
+            <div class="title">
+              历史人力投入
+            </div>
+            <div class="select ml-20">
+              <el-date-picker
+                @change='selectEvent'
+                v-model="monthVal"
+                type="month"
+                size="mini"
+                :picker-options="pickerOptions0"
+                value-format="yyyy/MM"
+                placeholder="选择月">
+              </el-date-picker>
+            </div>
+            <div class="select ml-20">
+              <el-select @change='selectPro' size="mini" v-model="HPro" clearable placeholder="请选择项目">
+                <el-option
+                  v-for="item in allHPro"
+                  :key="item.project_id"
+                  :label="item.project_name"
+                  :value="item.project_id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="select ml-20">
+              <el-select
+                @change='selectEvent'
+                filterable
+                clearable
+                size="mini"
+                v-model="historyMember"
+                placeholder="请输入成员"
+                @focus="searchMember1 = []"
+                remote
+                reserve-keyword
+                :remote-method="remoteMethod1">
+                <el-option
+                  v-for="item in searchMember1"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+
+          </el-col>
+        </el-row>
+        <el-row class="mt20">
+          <el-table
+            :data="historyTableData.record"
+            border
+            v-loading="loading2"
+            height="619"
+            :cell-class-name="cellStyle"
+            :cell-style="cellStyle2">
+            <el-table-column
+              v-for="(item, index) in historyTableData.column"
+              :fixed="item.key === 'month'"
+              :prop="item.key+''"
+              :label="item.title"
+              :key="item.key"
+              :min-width="'200'"
+              :width="index === historyTableData.column.length - 1? '': '200'"
+              >
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            v-if="hisPage > 10"
+            layout="prev, pager, next"
+            :total="50"
+            :current-page.sync="hisPage"
+            style="text-align: center;"
+            class="mt20"
+            @current-change="handleCurrentChange">
+          </el-pagination>
+        </el-row>
+      </el-row>
+    </el-tab-pane>
+
+
+
+    <el-tab-pane lazy :label="'成本数据'" name="third">
+      <!-- 成本数据titleName -->
+      <el-row class="">
+        <el-row>
+          <el-col :span="24" class="table-title">
+            <div class="title">
+              成本数据
+            </div>
+            <div class="select ml-20">
+              <el-select
+                style="width: 280px"
+                @change='selectPro3'
+                size="mini"
+                v-model="HPro2"
+                multiple
+                collapse-tags
+                clearable placeholder="请选择项目">
+                <el-option
+                  v-for="item in allHPro2"
+                  :key="item.project_id"
+                  :label="item.project_name"
+                  :value="item.project_id">
+                </el-option>
+              </el-select>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              :data="historyCostData.record"
+              border
+              v-loading="loading3"
+              style="width: 100%"
+              :cell-style="cellStyle2"
+              :header-cell-style="{textAlign: 'center'}">
+              <el-table-column
+                v-for="(item, index) in historyCostData.column"
+                :fixed="item.key === 'month'"
+                :key="item.key"
+                :prop="item.key+''"
+                :label="item.title"
+                :width="index === historyCostData.column.length - 1? '200': '200'">
+                <template slot-scope="scope">
+                  {{scope.row[item.key + ''] | getThousandNum}}
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              v-if="hisCostTotal > 10"
+              layout="prev, pager, next"
+              :total="hisCostTotal"
+              :current-page.sync="hisCostPage"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+      </el-row>
+    </el-tab-pane>
+  </el-tabs>
+</div>

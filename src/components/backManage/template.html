@@ -1,0 +1,462 @@
+<div class="backManage">
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane lazy label="项目开关" name="first">
+      <!-- 项目开关 -->
+      <el-row>
+        <el-row class="table-title">
+          <div class="title">
+            项目开关
+          </div>
+          <div class="select ml-20">
+            <el-select style="width: 280px"  multiple collapse-tags @change='select' clearable size="mini" v-model="studioFlock" clearable placeholder="工作室群">
+              <el-option
+                v-for="item in allStudioFlock"
+                :key="item.id"
+                :label="item.name"
+                :value="item.dep_no">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="select ml-20">
+            <el-select style="width: 280px"  multiple collapse-tags @change='select2' clearable size="mini" v-model="studio" clearable placeholder="工作室">
+              <el-option
+                v-for="item in allStudio"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </div>
+          <!-- <div class="select ml-20"><button @click="handleDownload">按钮</button></div> -->
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              v-loading="loading1"
+              :data="proData"
+              border
+              height="529"
+              style="width: 100%">
+              <el-table-column
+                prop="studioFlock"
+                label="工作室群"
+                width="166">
+              </el-table-column>
+              <el-table-column
+                prop="studio"
+                label="工作室"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="projectId"
+                label="项目代号"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="project"
+                label="项目名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="isClose"
+                label="是否关闭"
+                width="">
+                <template slot-scope="{row, column, $index}">
+                  <!-- `checked` 为 true 或 false -->
+                  <el-checkbox @change="checkboxChange(row)" v-model="row.isClose">关闭</el-checkbox>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :total="total"
+              :current-page.sync="page"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane lazy label="工种配置" name="second">
+      <!-- 工种配置 -->
+      <el-row>
+        <el-row class="table-title" style="line-height: 28px;">
+          <div class="title">
+            工种配置
+          </div>
+          <div class="add ml-20">
+            <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+            <el-button size="mini" @click="addType" round type="primary">新增类型</el-button>
+          </div>
+          <div class="add ml-20">
+            <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+            <el-button size="mini" @click="addProfession" round type="primary">新增工种</el-button>
+          </div>
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              v-loading="loading2"
+              :data="professionData"
+              border
+              height="529"
+              style="width: 100%">
+              <el-table-column
+                prop="type"
+                label="类型"
+                width="166">
+              </el-table-column>
+              <el-table-column
+                prop="profession"
+                label="工种"
+                width="">
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                width="100">
+                <template slot-scope="{row, column, $index}">
+                  <el-button @click="editData(row)" type="text" size="small">编辑</el-button>
+                  <el-button type="text" @click="delData(row)" size="small" style="color: #F56C6C">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :total="total2"
+              :current-page.sync="page2"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+        <!-- 新增类型 -->
+        <el-dialog title="添加类型"
+          :visible.sync="dialogVisible"
+          width="600px">
+          <el-form
+            v-loading="isLoading"
+            size="small"
+            :model="ruleForm"
+            :rules="rules"
+            ref="ruleForm"
+            label-width="100px"
+            class="demo-ruleForm">
+            <el-form-item label="类型" prop="type">
+              <el-input v-model="ruleForm.type" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')">立即提交</el-button>
+              <el-button @click="dialogVisible = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+        <!-- 新增工种 -->
+        <el-dialog title="添加工种"
+          :visible.sync="dialogVisible2"
+          width="600px">
+          <el-form
+            v-loading="isLoading2"
+            size="small"
+            :model="ruleForm2"
+            :rules="rules2"
+            ref="ruleForm2"
+            label-width="100px"
+            class="demo-ruleForm">
+            <el-form-item label="类型" prop="typeId">
+              <el-select v-model="ruleForm2.typeId" placeholder="请选择类型">
+                <el-option
+                  v-for="item in allType"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工种名" prop="profession">
+              <el-input v-model="ruleForm2.profession" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm2')">立即提交</el-button>
+              <el-button @click="dialogVisible2 = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+        <!-- 编辑工种 -->
+        <el-dialog title="编辑工种"
+          :visible.sync="dialogVisible3"
+          width="600px">
+          <el-form
+            v-loading="isLoading3"
+            size="small"
+            :model="ruleForm3"
+            :rules="rules3"
+            ref="ruleForm3"
+            label-width="100px"
+            class="demo-ruleForm">
+            <el-form-item label="类型" prop="typeId">
+              <el-select v-model="ruleForm3.typeId" placeholder="请选择类型">
+                <el-option
+                  v-for="item in allType"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工种名" prop="profession">
+              <el-input v-model="ruleForm3.profession" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm3')">立即提交</el-button>
+              <el-button @click="dialogVisible3 = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane lazy label="人员信息变更" name="third">
+      <!-- 人员信息变更 -->
+      <el-row>
+        <el-row class="table-title">
+          <div class="title">
+            <div style="width: 89px">信息变更</div>
+          </div>
+          <div class="search">
+            <div class="select ml-20">
+              <el-select
+                style="width: 280px"
+                multiple
+                collapse-tags
+                @change='select'
+                clearable
+                size="mini"
+                v-model="studioFlock3"
+                placeholder="工作室群">
+                <el-option
+                  v-for="item in allStudioFlock"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.dep_no">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="select ml-20">
+              <el-select
+                style="width: 280px"
+                multiple
+                collapse-tags
+                @change='select2'
+                clearable
+                size="mini"
+                v-model="studio3"
+                placeholder="工作室">
+                <el-option
+                  v-for="item in allStudio"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="select ml-20">
+              <el-select style="width: 200px" multiple collapse-tags @change='select3' clearable size="mini" v-model="typeIds" clearable placeholder="类型">
+                <el-option
+                  v-for="item in allType2"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="select ml-20">
+              <el-select style="width: 200px" multiple collapse-tags @change='select4' clearable size="mini" v-model="professionIds" clearable placeholder="工种">
+                <el-option
+                  v-for="item in allProfession"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+            <div class="select ml-20">
+              <el-select
+                style="width: 222px;"
+                v-model="infoName"
+                size="mini"
+                @change='select5'
+                placeholder="姓名"
+                multiple
+                collapse-tags
+                filterable
+                default-first-option
+                ref="members">
+                <el-option
+                  v-for="item in allMember"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </div>
+          </div>
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              v-loading="loading3"
+              :data="infoData"
+              border
+              height="529"
+              style="width: 100%">
+              <el-table-column
+                prop="studioFlock"
+                label="工作室群"
+                width="166">
+              </el-table-column>
+              <el-table-column
+                prop="studio"
+                label="工作室"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="type"
+                label="类型"
+                width="180">
+              </el-table-column>
+              <el-table-column
+                prop="profession"
+                label="工种"
+                width="">
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="变更"
+                width="100">
+                <template slot-scope="{row, column, $index}">
+                  <el-button @click="aditInfo(row)" type="text" size="small">编辑</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :total="total3"
+              :current-page.sync="page3"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+        <!-- 编辑人员信息 -->
+        <el-dialog title="编辑人员信息"
+          :visible.sync="dialogVisible4"
+          width="600px">
+          <el-form
+            v-loading="isLoading4"
+            size="small"
+            :model="ruleForm4"
+            :rules="rules4"
+            ref="ruleForm4"
+            label-width="100px"
+            class="demo-ruleForm">
+            <el-form-item label="姓名" prop="name">
+              {{ruleForm4.name}}
+            </el-form-item>
+            <!-- <el-form-item label="工作室群" prop="studioFlockId">
+              <el-select
+                v-model="ruleForm4.studioFlockId"
+                filterable
+                placeholder="请输入工作室群"
+                clearable
+                @change="select6">
+                <el-option
+                  v-for="item in allStudioFlock3"
+                  :key="item.id"
+                  :label="item.dep_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item
+              label="工作室"
+              prop="studioId">
+              <el-select
+                v-model="ruleForm4.studioId"
+                placeholder="请选择工作室"
+                filterable
+                clearable>
+                <el-option
+                  v-for="item in allStudio3"
+                  :key="item.id"
+                  :label="item.dep_name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item> -->
+            <el-form-item label="工作室群" prop="studioFlock">
+              {{ruleForm4.studioFlock}}
+            </el-form-item>
+            <el-form-item
+              label="工作室"
+              prop="studio">
+              {{ruleForm4.studio}}
+            </el-form-item>
+            <el-form-item
+              label="类型"
+              prop="typeId">
+              <el-select
+                v-model="ruleForm4.typeId"
+                placeholder="请选择类型"
+                @change="select7">
+                <el-option
+                  v-for="item in allType3"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="工种" prop="professionId">
+              <el-select v-model="ruleForm4.professionId" placeholder="请选择工种">
+                <el-option
+                  v-for="item in allProfession3"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm4')">立即提交</el-button>
+              <el-button @click="dialogVisible4 = false">取消</el-button>
+            </el-form-item>
+          </el-form>
+        </el-dialog>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane lazy label="项目属性变更" name="fourth">
+      <project-prop
+        :allStudioFlock="allStudioFlock"
+        :allStudio="allStudio">
+      </project-prop>
+    </el-tab-pane>
+    <el-tab-pane lazy label="过审阶段变更" name="fifth">
+      <Stage></Stage>
+    </el-tab-pane>
+  </el-tabs>
+</div>

@@ -1,0 +1,207 @@
+<div class="ipBudget">
+  <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tab-pane label="IP预算" name="first">
+      <!-- IP预算 -->
+      <el-row>
+        <el-row class="table-title">
+          <div class="title">
+            IP预算
+          </div>
+          <div class="select ml-20">
+            <el-select @change="proChange" size="mini" v-model="project" placeholder="请选择项目">
+              <el-option
+                v-for="item in allProject1"
+                :key="item.project_id"
+                :label="item.project_name"
+                :value="item.project_id">
+              </el-option>
+            </el-select>
+          </div>
+          <div class="add ml-20" v-if="$store.getters.permission">
+            <!-- <el-button size="small" icon="el-icon-plus" circle></el-button> -->
+            <el-button size="mini" @click="addMember" round type="primary">新增</el-button>
+          </div>
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              :data="proInputData.record"
+              v-loading="loading1"
+              border
+              height="636"
+              style="width: 100%"
+              :cell-style="cellStyle2"
+              :header-cell-style="{textAlign: 'center'}">
+              <el-table-column
+                v-for="(item, index) in proInputData.column"
+                :fixed="index === 0 || index === 1 || index === 2"
+                :key="item.key"
+                :prop="item.key"
+                :label="item.title"
+                :width="index === proInputData.column.length - 1? '': 180"
+                min-width="180">
+                <template slot-scope="scope">
+                  {{scope.row[item.key + ''] | getThousandNum}}
+                </template>
+              </el-table-column>
+              <el-table-column
+                fixed="right"
+                label="操作"
+                width="100"
+                v-if="$store.getters.permission">
+                <template slot-scope="{row, column, $index}">
+                  <div v-if="row.project">
+                    <el-button @click="editData(row)" type="text" size="small">编辑</el-button>
+                    <el-button type="text" @click="delData(row)" size="small" style="color: #F56C6C">删除</el-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              :page-size="pageSize"
+              @size-change="handleSizeChange"
+              :total="proTotal"
+              :current-page.sync="proPage"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+        <el-dialog title="添加预算" :visible.sync="dialogVisible" width="600px">
+          <div class="ovflow_scroll" style="max-height:500px; padding: 0 30px;">
+            <el-form size="small" :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="IP内容" prop="content">
+                <el-input v-model="ruleForm.content" auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="成本类型" prop="cost_type">
+                <el-input v-model="ruleForm.cost_type" auto-complete="off"></el-input>
+              </el-form-item>
+              <!-- <el-form-item label="所属项目" prop="projectid">
+                <el-select @change='getMR' v-model="ruleForm.projectid" placeholder="请选择项目">
+                  <el-option
+                    v-for="item in allProject1"
+                    :key="item.project_id"
+                    :label="item.project_name"
+                    :value="item.project_id">
+                  </el-option>
+                </el-select>
+              </el-form-item> -->
+              <el-form-item
+                v-for="item in timeRange"
+                :key="item.key"
+                :label="item.title"
+                :prop="item.key">
+                <el-input
+                  v-model.number="ruleForm[item.key]"
+                  auto-complete="off">
+                </el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submitForm('ruleForm')">立即提交</el-button>
+            <el-button @click="dialogVisible = false">取消</el-button>
+          </span>
+        </el-dialog>
+        <el-dialog title="编辑预算" :visible.sync="dialogVisible2" width="600px">
+          <div class="ovflow_scroll" style="max-height:500px; padding: 0 30px;">
+            <el-form size="small" :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+              <el-form-item label="IP内容" prop="content">
+                <!-- <el-input v-model="ruleForm2.content" auto-complete="off"></el-input> -->
+                {{ruleForm2.content}}
+              </el-form-item>
+              <el-form-item label="成本类型" prop="cost_type">
+                <!-- <el-input v-model="ruleForm2.cost_type" auto-complete="off"></el-input> -->
+                {{ruleForm2.cost_type}}
+              </el-form-item>
+              <el-form-item label="所属项目" prop="projectid">
+                <!-- <el-select @change='getMR' v-model="ruleForm2.projectid" placeholder="请选择项目">
+                  <el-option
+                    v-for="item in allProject1"
+                    :key="item.project_id"
+                    :label="item.project_name"
+                    :value="item.project_id">
+                  </el-option>
+                </el-select> -->
+                {{ruleForm2.project}}
+              </el-form-item>
+              <el-form-item
+                v-for="item in timeRange"
+                :label="item.title"
+                :prop="item.key"
+                :key="item.key">
+                <el-input
+                  v-model.number="ruleForm2[item.key]"
+                  auto-complete="off"></el-input>
+              </el-form-item>
+            </el-form>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="submitForm('ruleForm2')">立即提交</el-button>
+            <el-button @click="dialogVisible2 = false">取消</el-button>
+          </span>
+        </el-dialog>
+      </el-row>
+    </el-tab-pane>
+    <el-tab-pane label="预算数据" name="second">
+      <!-- 预算数据 -->
+      <el-row class="">
+        <el-row style="line-height: 28px;">
+          <el-col :span="24" class="table-title">
+            <div class="title">
+              预算数据
+            </div>
+            <div class="select ml-20">
+              <el-select @change="proChange" size="mini" v-model="project1" placeholder="请选择项目">
+                <el-option
+                  v-for="item in allProject1"
+                  :key="item.project_id"
+                  :label="item.project_name"
+                  :value="item.project_id">
+                </el-option>
+              </el-select>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row class="mt20">
+          <el-col :span="24">
+            <el-table
+              :data="historyCostData.record"
+              border
+              v-loading="loading2"
+              height="636"
+              style="width: 100%"
+              :cell-style="cellStyle2"
+              :header-cell-style="{textAlign: 'center'}">
+              <el-table-column
+                v-for="(item, index) in historyCostData.column"
+                :fixed="index === 0 || index === 1 || index === 2 || index === 3"
+                :key="item.key"
+                :prop="item.key"
+                :label="item.title"
+                width="180">
+                <template slot-scope="scope">
+                  {{scope.row[item.key + ''] | getThousandNum}}
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next"
+              @size-change="handleSizeChange"
+              :page-size="pageSize"
+              :total="hisTotal"
+              :current-page.sync="hisPage"
+              style="text-align: center;"
+              class="mt20"
+              @current-change="handleCurrentChange">
+            </el-pagination>
+          </el-col>
+        </el-row>
+      </el-row>
+    </el-tab-pane>
+  </el-tabs>
+</div>

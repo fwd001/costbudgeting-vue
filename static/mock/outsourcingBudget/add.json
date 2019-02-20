@@ -1,0 +1,14 @@
+
+    {
+        "post": {
+            "projectId": 2,
+            "artId": 1,
+            "unitPrice": 2,
+            "currencyId": 1,
+            "2018/08": 200,
+            "2018/09": 300
+            },
+        "data": {},
+        "code": 200,
+        "msg": "请求成功"
+    }

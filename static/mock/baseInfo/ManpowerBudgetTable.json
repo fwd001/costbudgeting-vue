@@ -1,0 +1,16 @@
+{
+	"column": [
+	  {"key": "IPcontent","title": "项目"},
+	  {"key": "IPcontent","title": "级别"},
+	  {"key": "IPcontent","title": "项目"},
+	  {"key": "IPcontent","title": "项目"},
+	  {"key": "IPcontent","title": "项目"},
+	  {"key": "IPcontent","title": "项目"}
+	],
+	"record": [
+	  {
+			"IPcontent": "大i",
+			"type": "ip"
+	  }
+	]
+}

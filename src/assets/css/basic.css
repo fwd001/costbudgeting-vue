@@ -1,0 +1,193 @@
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+  color: #1e1e1e;
+}
+
+a {
+  text-decoration: none;
+}
+
+.clearFix:before,
+.clearFix:after {
+  content: '.';
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+
+.clearFix:after {
+  clear: both;
+}
+
+.clearFix {
+  zoom: 1;
+}
+body {
+  color: #303133;
+}
+.db {
+  display: block;
+}
+.dib {
+  display: inline-block;
+}
+.di {
+  display: inline;
+}
+.dn {
+  display: none;
+}
+.left {
+  float: left;
+}
+
+.right {
+  float: right;
+}
+.mt10 {
+  margin-top: 10px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+.ml-10 {
+  margin-left: 10px;
+}
+.ml-20 {
+  margin-left: 20px;
+}
+html,
+body,
+#app {
+  height: 100%;
+}
+.el-table .cell {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.el-table .cell .singleRow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table-title {
+  display: flex;
+  align-items: center;
+}
+
+.el-main {
+  background: #f2f6fc;
+  padding: 0 20px;
+}
+.el-main > div {
+  padding: 20px 20px;
+  background: #fff;
+  height: auto;
+  border-radius: 6px;
+  min-height: calc(100% - 40px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.table-title .title {
+  position: relative;
+  font-size: 18px;
+  padding-left: 10px;
+}
+
+/*  标题前面的 蓝色竖杠杠 */
+/*  ----  start --- */
+.table-title .title::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 4px;
+  height: 18px;
+  background: #409eff;
+  transform: translateY(-50%);
+}
+/*  ----  end --- */
+
+.el-dialog__footer {
+  text-align: center;
+}
+.ovflow_scroll {
+  overflow: hidden;
+  overflow-y: auto;
+}
+.isGray {
+  color: #c0c4cc;
+}
+/* 投入度按钮颜色 */
+.el-input-group__append {
+  background: #409eff;
+  color: #fff;
+}
+.pieBox {
+  overflow: hidden;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.pieBox>div{
+  flex: 1;
+  /* display: flex;
+  flex-direction: row; */
+  /* width: 50%; */
+  /* float: left; */
+}
+.pieStyle>div {
+  margin: 0 auto;
+}
+.pieStyle {
+  /* margin-bottom: 10px; */
+  /* width: 50%;
+  height: 470px; */
+}
+.search {
+  display: flex;
+  /* flex-wrap: wrap;
+  height: 60px;
+  align-content: space-between; */
+}
+@media (max-width: 1720px) {
+
+  .search {
+    display: flex;
+    flex-wrap: wrap;
+    height: 60px;
+    align-content: space-between;
+  }
+}
+.search1 {
+  display: flex;
+  flex-wrap: wrap;
+  height: 60px;
+  align-content: space-between;
+}
+
+.ellipsis {
+  display: inline-block;
+  width: 180px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grayHeader {
+  background: rgb(248, 248, 249)!important;
+  color: rgb(73, 80, 96)!important;
+  text-align: center!important;
+}
+table thead th {
+  background: rgb(248, 248, 249)!important;
+  color: rgb(73, 80, 96)!important;
+  text-align: center!important;
+}

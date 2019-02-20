@@ -1,0 +1,94 @@
+
+    {
+      "data": {
+          "pie1": {
+              "title": "到（9月底）总成本",
+              "sum": [
+              {"value": 335, "name": "人员"},
+              {"value": 679, "name": "前置发行成本"},
+              {"value": 1548, "name": "外包成本"},
+              {"value": 1118, "name": "IP成本"}
+            ],
+            "details": [
+              {"value": 335, "name": "代理"},
+              {"value": 310, "name": "美术外包"},
+              {"value": 234, "name": "音频外包"},
+              {"value": 135, "name": "翻译外包"},
+              {"value": 1048, "name": "研发人力"},
+              {"value": 251, "name": "美术人力"},
+              {"value": 147, "name": "中台人力"},
+              {"value": 102, "name": "其他"}
+            ],
+            "legend": ["人员", "IP成本", "外包成本", "前置发行成本", "代理", "美术外包", "音频外包", "翻译外包", "研发人力", "美术人力", "中台人力", "其他"]
+          },
+          "pie2": {
+            "title": "到（10月起）到上线预算",
+            "sum": [
+              {"value": 335, "name": "人员"},
+              {"value": 679, "name": "前置发行成本"},
+              {"value": 1548, "name": "外包成本"},
+              {"value": 1118, "name": "IP成本"}
+            ],
+            "details": [
+              {"value": 335, "name": "代理"},
+              {"value": 310, "name": "美术外包"},
+              {"value": 234, "name": "音频外包"},
+              {"value": 135, "name": "翻译外包"},
+              {"value": 1048, "name": "研发人力"},
+              {"value": 251, "name": "美术人力"},
+              {"value": 147, "name": "中台人力"},
+              {"value": 102, "name": "其他"}
+            ],
+            "legend": ["人员", "IP成本", "外包成本", "前置发行成本", "代理", "美术外包", "音频外包", "翻译外包", "研发人力", "美术人力", "中台人力", "其他"]
+          },
+          "column": [
+            {
+                "key": "phase",
+                "title": "阶段"
+            },
+            {
+                "key": "totalCost",
+                "title": "总额"
+            },
+            {
+                "key": "humanCost",
+                "title": "人员成本"
+            },
+            {
+                "key": "IPCost",
+                "title": "IP成本"
+            },
+            {
+                "key": "outsourcingCost",
+                "title": "外包成本"
+            },
+            {
+                "key": "publicCost",
+                "title": "前置发行成本"
+            }
+          ],
+          "record": [
+            {
+                "id": 1,
+                "phase": "截止（2018/09/20）总成本",
+                "totalCost": 999999,
+                "humanCost": 131535,
+                "IPCost": 56415,
+                "outsourcingCost": 56153,
+                "publicCost": 91256
+            },
+            {
+                "id": 1,
+                "phase": "（2018/09/20）到上线预算还需",
+                "totalCost": 999999,
+                "humanCost": 131535,
+                "IPCost": 56415,
+                "outsourcingCost": 56153,
+                "publicCost": 91256
+            }
+
+          ]
+      },
+      "code": 200,
+      "msg": "请求成功"
+  }

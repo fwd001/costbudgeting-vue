@@ -1,0 +1,67 @@
+
+       {
+        "post": {
+            "projectId": 2,
+            "page": 1,
+            "pageSize": 10
+        },
+        "data": {
+            "column": [
+                {
+                    "key": "audioName",
+                    "title": "音频外包内容"
+                },
+                {
+                    "key": "unitCost",
+                    "title": "单位成本值"
+                },
+                {
+                    "key": "2018/08",
+                    "title": "2018/08"
+                },
+                {
+                    "key": "2018/09",
+                    "title": "2018/09"
+                }
+            ],
+            "record": [
+                {
+                    "id": 1,
+                    "audioId": 2,
+                    "audioName": "写实原画角色",
+                    "unitCost": "300",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 2,
+                    "audioId": 2,
+                    "audioName": "写实原画角色",
+                    "unitCost": "300",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 3,
+                    "audioId": 2,
+                    "audioName": "写实原画角色",
+                    "unitCost": "300",
+                    "2018/08": "100",
+                    "2018/09": "200"
+                },
+                {
+                    "id": 4,
+                    "audioId": 2,
+                    "audioName": "合计",
+                    "unitCost": "-",
+                    "2018/08": "67500",
+                    "2018/09": "67540"
+                }
+            ],
+            "total": 40,
+            "page": 1,
+            "pageSize": "1"
+        },
+        "code": 200,
+        "msg": "请求成功"
+    }
